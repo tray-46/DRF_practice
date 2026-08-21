@@ -7,13 +7,13 @@ from dogs.apps import DogsConfig
 app_name = DogsConfig.name
 
 router = SimpleRouter()
-router.register(r"dogs", views.DogViewSet, basename="dog")
+router.register(r"", views.DogViewSet, basename="dog")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("breads/", views.BreadListAPIView.as_view(), name="bread-list"),
-    path("breads/<int:pk>/", views.BreadRetrieveAPIView.as_view(), name="bread-detail"),
-    path("breads/create/", views.BreadCreateAPIView.as_view(), name="bread-create"),
-    path("breads/<int:pk>/update/", views.BreadUpdateAPIView.as_view(), name="bread-update"),
-    path("breads/<int:pk>/delete/", views.BreadDestroyAPIView.as_view(), name="bread-delete"),
+    path("breeds/", views.BreadListAPIView.as_view(), name="bread-list"),
+    path("breeds/<int:pk>/", views.BreadRetrieveAPIView.as_view(), name="bread-detail"),
+    path("breeds/create/", views.BreadCreateAPIView.as_view(), name="bread-create"),
+    path("breeds/<int:pk>/update/", views.BreadUpdateAPIView.as_view(), name="bread-update"),
+    path("breeds/<int:pk>/delete/", views.BreadDestroyAPIView.as_view(), name="bread-delete"),
 ]
