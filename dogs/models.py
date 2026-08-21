@@ -12,7 +12,7 @@ class Bread(models.Model):
         verbose_name = "Порода"
         verbose_name_plural = "Породы"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -32,5 +32,5 @@ class Dog(models.Model):
         verbose_name = "Собака"
         verbose_name_plural = "Собаки"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
