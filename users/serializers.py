@@ -34,7 +34,7 @@ class TokenRefreshSerializer(TRSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        refresh_token_str =attrs["refresh_token"]
+        refresh_token_str =attrs["refresh"]
         refresh_token = RefreshToken(refresh_token_str)
 
         user_id = refresh_token.payload.get("user_id")
