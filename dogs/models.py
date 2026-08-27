@@ -2,7 +2,7 @@ from django.db import models
 
 
 # Create your models here.
-class Bread(models.Model):
+class Breed(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название породы", help_text="Укажите название породы")
     description = models.TextField(
         null=True, blank=True, verbose_name="Описание породы", help_text="Укажите описание породы"
@@ -18,8 +18,8 @@ class Bread(models.Model):
 
 class Dog(models.Model):
     name = models.CharField(max_length=100, verbose_name="Кличка", help_text="Укажите кличку")
-    bread = models.ForeignKey(
-        Bread, null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Порода", help_text="Выберите породу"
+    breed = models.ForeignKey(
+        Breed, null=True, blank=True, on_delete=models.SET_NULL, verbose_name="Порода", help_text="Выберите породу"
     )
     photo = models.ImageField(
         upload_to="dogs/photo/", null=True, blank=True, verbose_name="Фото", help_text="Загрузите фото собаки"
