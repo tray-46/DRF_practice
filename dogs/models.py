@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 # Create your models here.
@@ -7,6 +10,8 @@ class Breed(models.Model):
     description = models.TextField(
         null=True, blank=True, verbose_name="Описание породы", help_text="Укажите описание породы"
     )
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
+                              help_text="Укажите владельца")
 
     class Meta:
         verbose_name = "Порода"
@@ -27,6 +32,8 @@ class Dog(models.Model):
     date_born = models.DateField(
         null=True, blank=True, verbose_name="Дата рожддения", help_text="Укажите дату рождения"
     )
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
+                              help_text="Укажите владельца собаки")
 
     class Meta:
         verbose_name = "Собака"
