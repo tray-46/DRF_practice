@@ -2,10 +2,8 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework_simplejwt.views import TokenObtainPairView as TOPView, TokenRefreshView as TRView
 
-from users.serializers import TokenObtainPairSerializer, TokenRefreshSerializer, UserSerializer
-
 from users.models import User
-from users.serializers import UserCreateSerializer
+from users.serializers import TokenObtainPairSerializer, TokenRefreshSerializer, UserCreateSerializer
 
 # Create your views here.
 class TokenObtainPairView(TOPView):
