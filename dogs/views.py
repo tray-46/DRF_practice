@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import OrderingFilter, SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
+from dogs.pagination import Paginator
 from users.permissions import IsModerator, IsOwner
 from dogs.models import Breed, Dog
 from dogs.serializers import BreedSerializer, OneBreedSerializer, DogSerializer, DogDetailSerializer
@@ -12,15 +13,16 @@ from dogs.serializers import BreedSerializer, OneBreedSerializer, DogSerializer,
 
 # Create your views here.
 class BreedListAPIView(ListAPIView):
-    queryset = Breed.objects.all()
+    queryset = Breed.objects.all().order_by("name")
     serializer_class = BreedSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = Paginator
 
 
 class BreedRetrieveAPIView(RetrieveAPIView):
     queryset = Breed.objects.all()
     serializer_class = OneBreedSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
 
 
 class BreedCreateAPIView(CreateAPIView):
@@ -34,18 +36,19 @@ class BreedCreateAPIView(CreateAPIView):
 class BreedUpdateAPIView(UpdateAPIView):
     queryset = Breed.objects.all()
     serializer_class = BreedSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
 
 
 class BreedDestroyAPIView(DestroyAPIView):
     queryset = Breed.objects.all()
-    permission_classes = [IsAuthenticated, ~IsModerator]
+    permission_classes = [IsAuthenticated, ~IsModerator | IsOwner]
 
 
 class DogViewSet(ModelViewSet):
-    queryset = Dog.objects.all()
+    queryset = Dog.objects.all().order_by("name")
     serializer_class = DogSerializer
     # permission_classes = [IsAuthenticated, IsModerator]
+    pagination_class = Paginator
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter,)
     filterset_fields = ('breed__name',)
     ordering_fields = ('date_born',)
@@ -62,7 +65,7 @@ class DogViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action  == "create":
             self.permission_classes = [IsAuthenticated, ~IsModerator]
-        elif self.action in ["update", "retrive"]:
+        elif self.action in ["update", "partial_update", "retrieve"]:
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
         elif self.action == "destroy":
             self.permission_classes = [IsAuthenticated, ~IsModerator | IsOwner]
