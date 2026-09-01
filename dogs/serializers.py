@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from dogs.models import Breed, Dog
+from dogs.validators import WordsValidator, validate_forbidden_words
 
 
 class BreedSerializer(serializers.ModelSerializer):
@@ -11,6 +12,8 @@ class BreedSerializer(serializers.ModelSerializer):
 
 
 class DogSerializer(serializers.ModelSerializer):
+    # name = serializers.CharField(validators=[WordsValidator()])
+    name = serializers.CharField(validators=[validate_forbidden_words])
 
     class Meta:
         model = Dog
