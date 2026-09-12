@@ -1,0 +1,666 @@
+openapi: 3.0.3
+info:
+  title: Dogs service API
+  version: 1.0.0
+  description: API of Dogs service
+paths:
+  /dogs/:
+    get:
+      operationId: dogs_list
+      parameters:
+      - in: query
+        name: breed__name
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - dogs
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDogList'
+          description: ''
+    post:
+      operationId: dogs_create
+      tags:
+      - dogs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Dog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Dog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
+          description: ''
+  /dogs/{id}/:
+    get:
+      operationId: dogs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Собака.
+        required: true
+      tags:
+      - dogs
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DogDetail'
+          description: ''
+    put:
+      operationId: dogs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Собака.
+        required: true
+      tags:
+      - dogs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Dog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Dog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
+          description: ''
+    patch:
+      operationId: dogs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Собака.
+        required: true
+      tags:
+      - dogs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDog'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
+          description: ''
+    delete:
+      operationId: dogs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Собака.
+        required: true
+      tags:
+      - dogs
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /dogs/breeds/:
+    get:
+      operationId: dogs_breeds_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - dogs
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBreedList'
+          description: ''
+  /dogs/breeds/{id}/:
+    get:
+      operationId: dogs_breeds_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - dogs
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OneBreed'
+          description: ''
+  /dogs/breeds/{id}/delete/:
+    delete:
+      operationId: dogs_breeds_delete_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - dogs
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /dogs/breeds/{id}/update/:
+    put:
+      operationId: dogs_breeds_update_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - dogs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Breed'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Breed'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Breed'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Breed'
+          description: ''
+    patch:
+      operationId: dogs_breeds_update_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - dogs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBreed'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBreed'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBreed'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Breed'
+          description: ''
+  /dogs/breeds/create/:
+    post:
+      operationId: dogs_breeds_create_create
+      tags:
+      - dogs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Breed'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Breed'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Breed'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Breed'
+          description: ''
+  /users/login/:
+    post:
+      operationId: users_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /users/register/:
+    post:
+      operationId: users_register_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /users/token/refresh/:
+    post:
+      operationId: users_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    Breed:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название породы
+          description: Укажите название породы
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+          title: Описание породы
+          description: Укажите описание породы
+        owner:
+          type: integer
+          nullable: true
+          title: Владелец
+          description: Укажите владельца
+      required:
+      - id
+      - name
+    Dog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        photo:
+          type: string
+          format: uri
+          nullable: true
+          title: Фото
+          description: Загрузите фото собаки
+        date_born:
+          type: string
+          format: date
+          nullable: true
+          title: Дата рожддения
+          description: Укажите дату рождения
+        breed:
+          type: integer
+          nullable: true
+          title: Порода
+          description: Выберите породу
+        owner:
+          type: integer
+          nullable: true
+          title: Владелец
+          description: Укажите владельца собаки
+      required:
+      - id
+      - name
+    DogDetail:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Кличка
+          description: Укажите кличку
+          maxLength: 100
+        breed:
+          $ref: '#/components/schemas/Breed'
+        date_born:
+          type: string
+          format: date
+          nullable: true
+          title: Дата рожддения
+          description: Укажите дату рождения
+        breed_count:
+          type: integer
+          readOnly: true
+      required:
+      - breed
+      - breed_count
+      - name
+    OneBreed:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        dogs:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        name:
+          type: string
+          title: Название породы
+          description: Укажите название породы
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+          title: Описание породы
+          description: Укажите описание породы
+        owner:
+          type: integer
+          nullable: true
+          title: Владелец
+          description: Укажите владельца
+      required:
+      - dogs
+      - id
+      - name
+    PaginatedBreedList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Breed'
+    PaginatedDogList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dog'
+    PatchedBreed:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название породы
+          description: Укажите название породы
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+          title: Описание породы
+          description: Укажите описание породы
+        owner:
+          type: integer
+          nullable: true
+          title: Владелец
+          description: Укажите владельца
+    PatchedDog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        photo:
+          type: string
+          format: uri
+          nullable: true
+          title: Фото
+          description: Загрузите фото собаки
+        date_born:
+          type: string
+          format: date
+          nullable: true
+          title: Дата рожддения
+          description: Укажите дату рождения
+        breed:
+          type: integer
+          nullable: true
+          title: Порода
+          description: Выберите породу
+        owner:
+          type: integer
+          nullable: true
+          title: Владелец
+          description: Укажите владельца собаки
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    TokenRefresh:
+      type: object
+      properties:
+        refresh:
+          type: string
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - refresh
+    UserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Почта
+          description: Укажите почту
+          maxLength: 254
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          maxLength: 128
+      required:
+      - email
+      - password
+      - username
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
