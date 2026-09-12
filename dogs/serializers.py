@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from dogs.models import Breed, Dog
+from dogs.models import Breed, Dog, Donation
 from dogs.validators import WordsValidator, validate_forbidden_words
 
 
@@ -28,7 +28,7 @@ class DogDetailSerializer(serializers.ModelSerializer):
         model = Dog
         fields = ("name", "breed", "date_born", "breed_count")
 
-    def get_breed_count(self, obj):
+    def get_breed_count(self, obj) -> int:
         if obj.breed:
             count = obj.breed.dog_set.count()
             return count
@@ -43,5 +43,12 @@ class OneBreedSerializer(serializers.ModelSerializer):
         model = Breed
         fields = "__all__"
 
-    def get_dogs(self, obj):
+    def get_dogs(self, obj) -> list[str]:
         return [dog.name for dog in obj.dog_set.all()]
+
+
+class DonationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Donation
+        fields = "__all__"

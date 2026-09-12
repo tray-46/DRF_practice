@@ -15,5 +15,8 @@ urlpatterns = [
     path("breeds/create/", views.BreedCreateAPIView.as_view(), name="breed-create"),
     path("breeds/<int:pk>/update/", views.BreedUpdateAPIView.as_view(), name="breed-update"),
     path("breeds/<int:pk>/delete/", views.BreedDestroyAPIView.as_view(), name="breed-delete"),
+
+    path("donations/", views.DonationCreateAPIView.as_view(), name="donations"),
+
     path("", include(router.urls)),
 ]
