@@ -34,6 +34,7 @@ class Dog(models.Model):
     )
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
                               help_text="Укажите владельца собаки")
+    likes = models.ManyToManyField(User, related_name="users_likes")
 
     class Meta:
         verbose_name = "Собака"
@@ -41,3 +42,18 @@ class Dog(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class Donation(models.Model):
+    amount = models.PositiveIntegerField(verbose_name="Сумма пожертвования", help_text="Укажите сумму пожертвования")
+    session_id = models.CharField(max_length=255, null=True, blank=True, verbose_name="Id сессии",
+                                  help_text="Укажите id сесси")
+    link = models.URLField(max_length=500, null=True, blank=True, verbose_name="Ссылка на оплату")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Пользователь")
+
+    class Meta:
+        verbose_name = "Пожертвование"
+        verbose_name_plural = "Пожертвования"
+
+    def __str__(self) -> str:
+        return self.amount
