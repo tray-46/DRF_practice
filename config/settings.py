@@ -14,6 +14,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -135,6 +136,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -145,9 +150,18 @@ MEDIA_URL = "/media/"
 
 MAILERS = {
     "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": os.getenv("EMAIL_HOST"),
+            "port": os.getenv("EMAIL_PORT"),
+            "use_tls": os.getenv("EMAIL_USE_TLS", False) == "True",
+            "use_ssl": os.getenv("EMAIL_USE_SSL", False) == "True",
+            "username": os.getenv("EMAIL_HOST_USER"),
+            "password": os.getenv("EMAIL_HOST_PASSWORD"),
+        }
     },
 }
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
 AUTH_USER_MODEL = "users.User"
 
@@ -181,3 +195,16 @@ SPECTACULAR_SETTINGS = {
 
 
 STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
+
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
+
+CELERY_BEAT_SCHEDULE = {
+    "dog_bd": {
+        "task": "dogs.tasks.dog_birthday",
+        "schedule": timedelta(seconds=30),
+    }
+}

@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status
+from rest_framework import status, request
+from rest_framework.decorators import action
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -16,6 +17,7 @@ from users.permissions import IsModerator, IsOwner
 from dogs.models import Breed, Dog
 from dogs.serializers import BreedSerializer, OneBreedSerializer, DogSerializer, DogDetailSerializer, DonationSerializer
 
+from dogs.tasks import dog_likes
 
 # Create your views here.
 class BreedListAPIView(ListAPIView):
@@ -78,7 +80,35 @@ class DogViewSet(ModelViewSet):
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
         elif self.action == "destroy":
             self.permission_classes = [IsAuthenticated, ~IsModerator | IsOwner]
+        elif self.action in ["like"]:
+            self.permission_classes = [IsAuthenticated, ~IsModerator | IsOwner]
         return super().get_permissions()
+
+    @action(detail=True, methods=["post"])
+    def like(self, request, pk=None):
+        dog = self.get_object()
+        user = request.user
+        if not user or not user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        if Dog.objects.filter(likes=user).exists():
+            dog.likes.remove(user)
+            return Response({"status": "like removed"}, status=status.HTTP_200_OK)
+        else:
+            dog.likes.add(user)
+            if dog.owner:
+                dog_likes.delay(dog.pk)
+            return Response({"status": "like added"}, status=status.HTTP_200_OK)
+
+
+
+    @action(detail=True, methods=["get"])
+    def likes(self, request, pk=None):
+        dog = self.get_object()
+        likes = dog.likes.all().count()
+
+        return Response({"like": likes}, status=status.HTTP_200_OK)
+
 
 
 class DonationCreateAPIView(CreateAPIView):
@@ -95,4 +125,17 @@ class DonationCreateAPIView(CreateAPIView):
         donation.save()
 
 
+# class DogLikeAPIView(APIView):
+#     permission_classes = [IsAuthenticated]
+#
+#     def post(self, request, *args, **kwargs):
+#         if request.user and request.user.is_authenticated:
+#             user: User = self.request.user
+#         else:
+#             return Response(status=status.HTTP_401_UNAUTHORIZED)
+#
+#         dog_pk = kwargs['pk']
+#         dog = get_object_or_404(Dog, pk=dog_pk)
+#
+#         user.users_likes.add(dog)
 

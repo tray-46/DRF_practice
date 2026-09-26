@@ -61,29 +61,28 @@ class DogTestCase(APITestCase):
     def test_dog_list(self):
         """dog list"""
         url = reverse("dogs:dog-list")
+        result = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "id": self.dog.pk,
+                    "name": "Гром",
+                    "photo": None,
+                    "date_born": None,
+                    "breed": self.breed.pk,
+                    "owner": self.user.pk,
+                    "likes": [],
+                },
+            ]
+        }
 
         response = self.client.get(url)
         data = response.json()
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(
-            data,
-            {
-                "count": 1,
-                "next": None,
-                "previous": None,
-                "results": [
-                    {
-                        "id": self.dog.pk,
-                        "name": "Гром",
-                        "photo": None,
-                        "date_born": None,
-                        "breed": self.breed.pk,
-                        "owner": self.user.pk,
-                    },
-                ]
-            }
-        )
+        self.assertEqual(data, result)
 
 
 class BreedTestCase(APITestCase):
@@ -137,8 +136,8 @@ class BreedTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Breed.objects.count(), 0)
 
-    def test_dog_list(self):
-        """dog list"""
+    def test_breed_list(self):
+        """breed list"""
         url = reverse("dogs:breed-list")
 
         response = self.client.get(url)

@@ -26,7 +26,7 @@ class DogDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dog
-        fields = ("name", "breed", "date_born", "breed_count")
+        fields = ("name", "breed", "date_born", "breed_count", "likes")
 
     def get_breed_count(self, obj) -> int:
         if obj.breed:
