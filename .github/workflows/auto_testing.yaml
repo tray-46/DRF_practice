@@ -6,33 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      SECRET_KEY: django-insecure-q5q+jdgm4t+dq==y9l7m3xi$b=qq3+*=ajbukahsx3*gll)@ry
-      REDIS_URL: redis://localhost:6379
-
-      PG_HOST: localhost
-      PG_PORT: 5432
-      PG_USER: postgres
-      PG_PASSWORD: postgres
-      PG_DBNAME: postgres
-
-    services:
-      redis:
-        image: redis
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-      postgres:
-        image: postgres
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_PASSWORD: postgres
-
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -64,11 +37,6 @@ jobs:
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
-
-      - name: Run migrations
-        run: |
-          source .venv/bin/activate
-          python manage.py migrate
 
       - name: Run tests
         run: |
