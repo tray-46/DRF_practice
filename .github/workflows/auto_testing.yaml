@@ -73,5 +73,6 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
-          python manage.py test
+#          python manage.py test
+          coverage run --source="." manage.py test
           coverage report
