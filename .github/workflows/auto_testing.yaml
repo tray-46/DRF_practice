@@ -9,7 +9,12 @@ jobs:
     env:
       SECRET_KEY: django-insecure-q5q+jdgm4t+dq==y9l7m3xi$b=qq3+*=ajbukahsx3*gll)@ry
       REDIS_URL: redis://localhost:6379
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+
+      PG_HOST: localhost
+      PG_PORT: 5432
+      PG_USER: postgres
+      PG_PASSWORD: postgres
+      PG_DBNAME: postgres
 
     services:
       redis:
