@@ -6,6 +6,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      SECRET_KEY: django-insecure-q5q+jdgm4t+dq==y9l7m3xi$b=qq3+*=ajbukahsx3*gll)@ry
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
