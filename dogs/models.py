@@ -34,7 +34,7 @@ class Dog(models.Model):
     )
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
                               help_text="Укажите владельца собаки")
-    likes = models.ManyToManyField(User, related_name="users_likes", null=True, blank=True)
+    likes = models.ManyToManyField(User, related_name="users_likes", blank=True)
 
     class Meta:
         verbose_name = "Собака"
