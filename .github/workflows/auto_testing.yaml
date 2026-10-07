@@ -92,7 +92,7 @@ jobs:
 
       - name: Copy files via SCP
         run: |
-          csp -r ./* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DIR }}
+          scp -r ./* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DIR }}
 
 #      - name: Copy project files to server
 #        run: |
