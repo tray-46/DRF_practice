@@ -80,9 +80,6 @@ jobs:
     needs: test
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.10.0
         with:
