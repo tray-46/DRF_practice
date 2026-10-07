@@ -90,9 +90,6 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Check out code
-        uses: actions/checkout@v3
-
       - name: Copy files via SCP
         run: |
           scp -r ./* ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_DIR }}
