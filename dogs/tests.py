@@ -10,7 +10,7 @@ from users.models import User
 class DogTestCase(APITestCase):
 
     def setUp(self):
-        self.user = User.objects.create(email='user@dogs.com', username='user', password='user')
+        self.user = User.objects.create(email="user@dogs.com", username="user", password="user")
         self.user.set_password(self.user.password)
         self.breed = Breed.objects.create(name="Лабродор", description="Очень красивая собака")
         self.dog = Dog.objects.create(name="Гром", breed=self.breed, owner=self.user)
@@ -75,7 +75,7 @@ class DogTestCase(APITestCase):
                     "owner": self.user.pk,
                     "likes": [],
                 },
-            ]
+            ],
         }
 
         response = self.client.get(url)
@@ -88,7 +88,7 @@ class DogTestCase(APITestCase):
 class BreedTestCase(APITestCase):
 
     def setUp(self):
-        self.user = User.objects.create(email='user@dogs.com', username='user', password='user')
+        self.user = User.objects.create(email="user@dogs.com", username="user", password="user")
         self.user.set_password(self.user.password)
         self.breed = Breed.objects.create(name="Лабродор", description="Очень красивая собака", owner=self.user)
         self.dog = Dog.objects.create(name="Гром", breed=self.breed, owner=self.user)
@@ -155,8 +155,8 @@ class BreedTestCase(APITestCase):
                         "id": self.breed.pk,
                         "name": self.breed.name,
                         "description": self.breed.description,
-                        "owner": self.user.pk
+                        "owner": self.user.pk,
                     },
-                ]
-            }
+                ],
+            },
         )

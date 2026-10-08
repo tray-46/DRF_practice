@@ -74,6 +74,7 @@ def send_birthday_email():
         backend = mail.mailers.default
         backend.send_messages(messages)
 
+
 # def send_telegram_massage(chat_id, message):
 #     params = {
 #         "chat_id": chat_id,

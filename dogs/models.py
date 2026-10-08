@@ -10,8 +10,9 @@ class Breed(models.Model):
     description = models.TextField(
         null=True, blank=True, verbose_name="Описание породы", help_text="Укажите описание породы"
     )
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
-                              help_text="Укажите владельца")
+    owner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец", help_text="Укажите владельца"
+    )
 
     class Meta:
         verbose_name = "Порода"
@@ -32,8 +33,14 @@ class Dog(models.Model):
     date_born = models.DateField(
         null=True, blank=True, verbose_name="Дата рожддения", help_text="Укажите дату рождения"
     )
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Владелец",
-                              help_text="Укажите владельца собаки")
+    owner = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Владелец",
+        help_text="Укажите владельца собаки",
+    )
     likes = models.ManyToManyField(User, related_name="users_likes", blank=True)
 
     class Meta:
@@ -46,8 +53,9 @@ class Dog(models.Model):
 
 class Donation(models.Model):
     amount = models.PositiveIntegerField(verbose_name="Сумма пожертвования", help_text="Укажите сумму пожертвования")
-    session_id = models.CharField(max_length=255, null=True, blank=True, verbose_name="Id сессии",
-                                  help_text="Укажите id сесси")
+    session_id = models.CharField(
+        max_length=255, null=True, blank=True, verbose_name="Id сессии", help_text="Укажите id сесси"
+    )
     link = models.URLField(max_length=500, null=True, blank=True, verbose_name="Ссылка на оплату")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Пользователь")
 

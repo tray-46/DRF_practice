@@ -57,21 +57,23 @@ class BreedDestroyAPIView(DestroyAPIView):
     permission_classes = [IsAuthenticated, ~IsModerator | IsOwner]
 
 
-@method_decorator(name="destroy", decorator=swagger_auto_schema(
-    operation_description="deleting the dog"
-))
+@method_decorator(name="destroy", decorator=swagger_auto_schema(operation_description="deleting the dog"))
 class DogViewSet(ModelViewSet):
     queryset = Dog.objects.all().order_by("name")
     serializer_class = DogSerializer
     # permission_classes = [IsAuthenticated, IsModerator]
     pagination_class = Paginator
-    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter,)
-    filterset_fields = ('breed__name',)
-    ordering_fields = ('date_born',)
-    search_fields = ('name',)
+    filter_backends = (
+        DjangoFilterBackend,
+        OrderingFilter,
+        SearchFilter,
+    )
+    filterset_fields = ("breed__name",)
+    ordering_fields = ("date_born",)
+    search_fields = ("name",)
 
     def get_serializer_class(self):
-        if self.action == 'retrieve':
+        if self.action == "retrieve":
             return DogDetailSerializer
         return DogSerializer
 
@@ -125,6 +127,7 @@ class DonationCreateAPIView(CreateAPIView):
         donation.session_id = session_id
         donation.link = payment_url
         donation.save()
+
 
 # class DogLikeAPIView(APIView):
 #     permission_classes = [IsAuthenticated]
