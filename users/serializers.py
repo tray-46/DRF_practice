@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer as TOPSerializer, TokenRefreshSerializer as TRSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer as TOPSerializer
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer as TRSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.models import User
@@ -34,7 +35,7 @@ class TokenRefreshSerializer(TRSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        refresh_token_str =attrs["refresh"]
+        refresh_token_str = attrs["refresh"]
         refresh_token = RefreshToken(refresh_token_str)
 
         user_id = refresh_token.payload.get("user_id")

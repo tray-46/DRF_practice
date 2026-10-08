@@ -1,23 +1,27 @@
-from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status, request
+from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import CreateAPIView, DestroyAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import OrderingFilter, SearchFilter
-from django_filters.rest_framework import DjangoFilterBackend
 
-from dogs.pagination import Paginator
-from dogs.services import convert_rub_to_usd, create_stripe_price, create_stripe_session
-from users.permissions import IsModerator, IsOwner
 from dogs.models import Breed, Dog
-from dogs.serializers import BreedSerializer, OneBreedSerializer, DogSerializer, DogDetailSerializer, DonationSerializer
-
+from dogs.pagination import Paginator
+from dogs.serializers import (
+    BreedSerializer,
+    DogDetailSerializer,
+    DogSerializer,
+    DonationSerializer,
+    OneBreedSerializer,
+)
+from dogs.services import convert_rub_to_usd, create_stripe_price, create_stripe_session
 from dogs.tasks import dog_likes
+from users.permissions import IsModerator, IsOwner
+
 
 # Create your views here.
 class BreedListAPIView(ListAPIView):
@@ -52,6 +56,7 @@ class BreedDestroyAPIView(DestroyAPIView):
     serializer_class = BreedSerializer
     permission_classes = [IsAuthenticated, ~IsModerator | IsOwner]
 
+
 @method_decorator(name="destroy", decorator=swagger_auto_schema(
     operation_description="deleting the dog"
 ))
@@ -74,7 +79,7 @@ class DogViewSet(ModelViewSet):
         serializer.save(owner=self.request.user)
 
     def get_permissions(self):
-        if self.action  == "create":
+        if self.action == "create":
             self.permission_classes = [IsAuthenticated, ~IsModerator]
         elif self.action in ["update", "partial_update", "retrieve"]:
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
@@ -100,15 +105,12 @@ class DogViewSet(ModelViewSet):
                 dog_likes.delay(dog.pk)
             return Response({"status": "like added"}, status=status.HTTP_200_OK)
 
-
-
     @action(detail=True, methods=["get"])
     def likes(self, request, pk=None):
         dog = self.get_object()
         likes = dog.likes.all().count()
 
         return Response({"like": likes}, status=status.HTTP_200_OK)
-
 
 
 class DonationCreateAPIView(CreateAPIView):
@@ -124,7 +126,6 @@ class DonationCreateAPIView(CreateAPIView):
         donation.link = payment_url
         donation.save()
 
-
 # class DogLikeAPIView(APIView):
 #     permission_classes = [IsAuthenticated]
 #
@@ -138,4 +139,3 @@ class DonationCreateAPIView(CreateAPIView):
 #         dog = get_object_or_404(Dog, pk=dog_pk)
 #
 #         user.users_likes.add(dog)
-

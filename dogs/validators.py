@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 FORBIDDEN_WORDS = ["ставки", "крипта", "продам", "гараж"]
 
+
 class WordsValidator:
 
     def __call__(self, value):

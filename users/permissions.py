@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import BasePermission
 
 
 class IsModerator(BasePermission):
@@ -15,7 +15,7 @@ class IsModerator(BasePermission):
     #         return False
     #     return True
 
-    def has_permission(self, request,view):
+    def has_permission(self, request, view):
         return bool(request.user.groups.filter(name="Moderators").exists())
 
 

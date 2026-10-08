@@ -14,7 +14,6 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -51,7 +50,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_spectacular",
     "drf_yasg",
-    
     "users",
     "dogs",
 ]

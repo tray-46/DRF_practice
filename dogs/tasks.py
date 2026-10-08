@@ -1,8 +1,6 @@
-from datetime import datetime
-
 from celery import shared_task
 
-from dogs.services import send_like_email, send_birthday_email
+from dogs.services import send_birthday_email, send_like_email
 
 
 @shared_task

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from dogs.models import Breed, Dog, Donation
-from dogs.validators import WordsValidator, validate_forbidden_words
+from dogs.validators import validate_forbidden_words
 
 
 class BreedSerializer(serializers.ModelSerializer):

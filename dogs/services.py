@@ -5,16 +5,15 @@
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 # django.setup()
 
-import stripe
-import requests
-
 from datetime import datetime
-from django.core import mail
-from django.shortcuts import get_object_or_404
 
-from config.settings import STRIPE_API_KEY
+import stripe
+from django.core import mail
+from django.core.mail import send_mail
+from django.shortcuts import get_object_or_404
 from forex_python.converter import CurrencyRates
 
+from config.settings import STRIPE_API_KEY
 from dogs.models import Dog
 
 stripe.api_key = STRIPE_API_KEY
@@ -56,10 +55,10 @@ def send_like_email(dog_id):
     )
     print("mail send")
 
+
 def send_birthday_email():
     dt_now = datetime.now()
     dogs = Dog.objects.filter(owner__isnull=False, date_born__month=dt_now.month, date_born__day=dt_now.day)
-    email_list = [dog.owner.email for dog in dogs]
 
     messages = list()
     for dog in dogs:
