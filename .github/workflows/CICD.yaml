@@ -91,7 +91,7 @@ jobs:
 
       - name: Run migrations
         run: |
-          poetry --version
+          poetry show
           source .venv/bin/activate
           python manage.py migrate
 
