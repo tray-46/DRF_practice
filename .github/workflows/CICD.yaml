@@ -130,8 +130,8 @@ jobs:
       - name: Deploy to server
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << "EOF"
-            sudo docker pull ${{ secrets.DOCKER_HUB_USER }}/drf-dogs:${{ github.sha }}
+            sudo docker pull ${{ secrets.DOCKER_HUB_USER }}/drf-dogs:latest
             sudo docker stop drf-dogs || true
             sudo docker rm drf-dogs || true
-            sudo docker run -d --name drf-dogs -p 80:8000 ${{ secrets.DOCKER_HUB_USER }}/drf-dogs:${{ github.sha }}
+            sudo docker run -d --name drf-dogs -p 80:8000 ${{ secrets.DOCKER_HUB_USER }}/drf-dogs:latest
           EOF
