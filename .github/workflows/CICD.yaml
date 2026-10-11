@@ -100,38 +100,38 @@ jobs:
           source .venv/bin/activate
           python manage.py test
 
-#  build:
-#    runs-on: ubuntu-latest
-#    needs: test
-#
-#    steps:
-#      - name: Check out repository
-#        uses: actions/checkout@v7
-#
-#      - name: Log in to Docker Hub
-#        run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
-#
-#      - name: Build Docker image
-#        run: docker build -t ${{ secrets.DOCKER_HUB_USER }}/drf-practice:${{ github.sha }} .
-#
-#      - name: Push Docker image to Docker Hub
-#        run: docker push ${{ secrets.DOCKER_HUB_USER }}/drf-practice:${{ github.sha }}
-#
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: build
-#
-#    steps:
-#      - name: Set SSH
-#        uses: webfactory/ssh-agent@v0.10.0
-#        with:
-#          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-#
-#      - name: Deploy to server
-#        run: |
-#          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << "EOF"
-#            docker pull ${{ secrets.DOCKER_HUB_USER }}/drf-practice:${{ github.sha }}
-#            docker stop drf-practice || true
-#            docker rm drf-practice || true
-#            docker run -d --name drf-practice -p 80:8000 ${{ secrets.DOCKER_HUB_USER }}/drf-practice:${{ github.sha }}
-#          EOF
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t ${{ secrets.DOCKER_HUB_USER }}/drf-practice:${{ github.sha }} .
+
+      - name: Push Docker image to Docker Hub
+        run: docker push ${{ secrets.DOCKER_HUB_USER }}/drf-practice:${{ github.sha }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Set SSH
+        uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << "EOF"
+            docker pull ${{ secrets.DOCKER_HUB_USER }}/drf-practice:${{ github.sha }}
+            docker stop drf-practice || true
+            docker rm drf-practice || true
+            docker run -d --name drf-practice -p 80:8000 ${{ secrets.DOCKER_HUB_USER }}/drf-practice:${{ github.sha }}
+          EOF
