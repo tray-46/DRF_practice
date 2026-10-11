@@ -28,7 +28,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: lint
+#    needs: lint
 
     env:
       SECRET_KEY: django-insecure-q5q+jdgm4t+dq==y9l7m3xi$b=qq3+*=ajbukahsx3*gll)@ry
